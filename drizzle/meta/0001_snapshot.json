@@ -1,6 +1,6 @@
 {
-  "id": "7434580f-4b42-48d5-88cb-05b35c7ee52c",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "c166ef8a-d7f2-4fbf-b481-e98c2c6193fa",
+  "prevId": "7434580f-4b42-48d5-88cb-05b35c7ee52c",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -8,6 +8,12 @@
       "name": "account",
       "schema": "",
       "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
         "userId": {
           "name": "userId",
           "type": "integer",
@@ -91,15 +97,7 @@
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {
-        "account_provider_providerAccountId_pk": {
-          "name": "account_provider_providerAccountId_pk",
-          "columns": [
-            "provider",
-            "providerAccountId"
-          ]
-        }
-      },
+      "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
