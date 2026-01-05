@@ -26,8 +26,9 @@ export function generateEmbedScript(projectKey: string, baseUrl: string = proces
   return `<script>
   (function() {
     var script = document.createElement('script');
-    script.src = '${baseUrl}/widget.js';
+    script.src = '${baseUrl}/api/widget';
     script.dataset.projectKey = '${projectKey}';
+    script.dataset.apiUrl = '${baseUrl}';
     document.head.appendChild(script);
   })();
 </script>`;
