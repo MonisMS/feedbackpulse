@@ -1,5 +1,8 @@
 'use client';
 
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { addLabelSchema, type AddLabelFormData } from '@/lib/validations';
 import { useState } from 'react';
 
 interface LabelManagerProps {
@@ -9,58 +12,60 @@ interface LabelManagerProps {
 }
 
 export default function LabelManager({ feedbackId, onLabelAdded, onCancel }: LabelManagerProps) {
-  const [label, setLabel] = useState('');
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState('');
+  const [apiError, setApiError] = useState('');
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<AddLabelFormData>({
+    resolver: zodResolver(addLabelSchema),
+  });
 
-    if (!label.trim()) {
-      setError('Label cannot be empty');
-      return;
-    }
+  const onSubmit = async (data: AddLabelFormData) => {
+    setApiError('');
 
     try {
-      setSaving(true);
       const response = await fetch(`/api/feedback/${feedbackId}/labels`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ label: label.trim() }),
+        body: JSON.stringify(data),
       });
 
       if (response.ok) {
         onLabelAdded();
-        setLabel('');
       } else {
-        const data = await response.json();
-        setError(data.error || 'Failed to add label');
+        const result = await response.json();
+        setApiError(result.error || 'Failed to add label');
       }
     } catch (err) {
-      setError('An error occurred');
-    } finally {
-      setSaving(false);
+      setApiError('An error occurred');
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="inline-flex items-center gap-2">
-      <input
-        type="text"
-        value={label}
-        onChange={(e) => setLabel(e.target.value)}
-        placeholder="Enter label..."
-        className="px-2 py-1 border border-gray-300 rounded text-xs focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-        autoFocus
-        disabled={saving}
-      />
+    <form onSubmit={handleSubmit(onSubmit)} className="inline-flex items-center gap-2">
+      <div className="inline-block">
+        <input
+          type="text"
+          {...register('label')}
+          placeholder="Enter label..."
+          className={`px-2 py-1 border rounded text-xs focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+            errors.label ? 'border-red-300' : 'border-gray-300'
+          }`}
+          autoFocus
+          disabled={isSubmitting}
+        />
+        {errors.label && (
+          <p className="text-xs text-red-600 mt-1">{errors.label.message}</p>
+        )}
+      </div>
       <button
         type="submit"
-        disabled={saving}
+        disabled={isSubmitting}
         className="px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded text-xs font-medium transition-colors disabled:opacity-50"
       >
-        {saving ? 'Adding...' : 'Add'}
+        {isSubmitting ? 'Adding...' : 'Add'}
       </button>
       <button
         type="button"
@@ -69,7 +74,7 @@ export default function LabelManager({ feedbackId, onLabelAdded, onCancel }: Lab
       >
         Cancel
       </button>
-      {error && <span className="text-xs text-red-600">{error}</span>}
+      {apiError && <span className="text-xs text-red-600">{apiError}</span>}
     </form>
   );
 }

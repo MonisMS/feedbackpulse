@@ -309,6 +309,37 @@
     document.getElementById('feedbackpulse-error').style.display = 'none';
   }
 
+  function validateForm(type, message, email) {
+    // Validate type
+    if (!type || type === '') {
+      return { valid: false, error: 'Please select a feedback type' };
+    }
+    if (!['bug', 'feature', 'other'].includes(type)) {
+      return { valid: false, error: 'Invalid feedback type' };
+    }
+
+    // Validate message
+    if (!message || message.trim() === '') {
+      return { valid: false, error: 'Message is required' };
+    }
+    if (message.trim().length < 10) {
+      return { valid: false, error: 'Message must be at least 10 characters' };
+    }
+    if (message.trim().length > 1000) {
+      return { valid: false, error: 'Message must be less than 1000 characters' };
+    }
+
+    // Validate email if provided
+    if (email && email.trim() !== '') {
+      var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email.trim())) {
+        return { valid: false, error: 'Please enter a valid email address' };
+      }
+    }
+
+    return { valid: true };
+  }
+
   function handleSubmit(e) {
     e.preventDefault();
     
@@ -319,8 +350,10 @@
     var name = document.getElementById('feedback-name').value;
     var email = document.getElementById('feedback-email').value;
     
-    if (!type || !message) {
-      showError('Please fill in all required fields');
+    // Validate form
+    var validation = validateForm(type, message, email);
+    if (!validation.valid) {
+      showError(validation.error);
       return;
     }
     
