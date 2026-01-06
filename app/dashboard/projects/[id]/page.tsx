@@ -33,8 +33,14 @@ export default function ProjectDetailsPage({ params }: ProjectDetailsPageProps) 
         const data = await response.json();
         setProject(data);
         setEditName(data.name);
-        // TODO: Fetch feedback count when feedback API is ready
-        setFeedbackCount(0);
+        
+        const feedbackResponse = await fetch(`/api/projects/${id}/feedback`);
+        if (feedbackResponse.ok) {
+          const feedbackData = await feedbackResponse.json();
+          setFeedbackCount(feedbackData.length);
+        } else {
+          setFeedbackCount(0);
+        }
       } else if (response.status === 404) {
         router.push('/dashboard');
       }
