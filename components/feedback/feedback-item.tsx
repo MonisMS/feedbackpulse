@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import type { FeedbackWithLabels } from '@/types/feedback';
 import LabelManager from './label-manager';
+import { useToast } from '@/components/providers/toast-provider';
 
 interface FeedbackItemProps {
   feedback: FeedbackWithLabels;
@@ -12,6 +13,7 @@ interface FeedbackItemProps {
 
 export default function FeedbackItem({ feedback, onLabelAdded, onLabelRemoved }: FeedbackItemProps) {
   const [showLabelInput, setShowLabelInput] = useState(false);
+  const { showSuccess, showError } = useToast();
 
   const typeConfig = {
     bug: { color: 'bg-red-100 text-red-700 border-red-200', icon: '🐛', label: 'Bug' },
@@ -115,10 +117,14 @@ export default function FeedbackItem({ feedback, onLabelAdded, onLabelRemoved }:
       });
 
       if (response.ok) {
+        showSuccess('Label removed');
         onLabelRemoved();
+      } else {
+        showError('Failed to remove label');
       }
     } catch (error) {
       console.error('Failed to remove label:', error);
+      showError('An error occurred');
     }
   }
 }

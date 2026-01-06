@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { addLabelSchema, type AddLabelFormData } from '@/lib/validations';
 import { useState } from 'react';
+import { useToast } from '@/components/providers/toast-provider';
 
 interface LabelManagerProps {
   feedbackId: number;
@@ -13,6 +14,7 @@ interface LabelManagerProps {
 
 export default function LabelManager({ feedbackId, onLabelAdded, onCancel }: LabelManagerProps) {
   const [apiError, setApiError] = useState('');
+  const { showSuccess, showError } = useToast();
 
   const {
     register,
@@ -33,13 +35,18 @@ export default function LabelManager({ feedbackId, onLabelAdded, onCancel }: Lab
       });
 
       if (response.ok) {
+        showSuccess('Label added successfully!');
         onLabelAdded();
       } else {
         const result = await response.json();
-        setApiError(result.error || 'Failed to add label');
+        const errorMsg = result.error || 'Failed to add label';
+        setApiError(errorMsg);
+        showError(errorMsg);
       }
     } catch (err) {
-      setApiError('An error occurred');
+      const errorMsg = 'An error occurred';
+      setApiError(errorMsg);
+      showError(errorMsg);
     }
   };
 

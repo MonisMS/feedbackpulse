@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createProjectSchema, type CreateProjectFormData } from '@/lib/validations';
 import { useState } from 'react';
+import { useToast } from '@/components/providers/toast-provider';
 
 interface CreateProjectFormProps {
   onClose: () => void;
@@ -12,6 +13,7 @@ interface CreateProjectFormProps {
 
 export default function CreateProjectForm({ onClose, onSuccess }: CreateProjectFormProps) {
   const [apiError, setApiError] = useState('');
+  const { showSuccess, showError } = useToast();
   
   const {
     register,
@@ -32,13 +34,18 @@ export default function CreateProjectForm({ onClose, onSuccess }: CreateProjectF
       });
 
       if (response.ok) {
+        showSuccess('Project created successfully!');
         onSuccess();
       } else {
         const result = await response.json();
-        setApiError(result.error || 'Failed to create project');
+        const errorMsg = result.error || 'Failed to create project';
+        setApiError(errorMsg);
+        showError(errorMsg);
       }
     } catch (err) {
-      setApiError('An error occurred. Please try again.');
+      const errorMsg = 'An error occurred. Please try again.';
+      setApiError(errorMsg);
+      showError(errorMsg);
     }
   };
 

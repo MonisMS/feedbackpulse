@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import type { Project } from '@/types/project';
 import { generateEmbedScript } from '@/lib/project-utils';
+import { useToast } from '@/components/providers/toast-provider';
 
 interface ProjectDetailsPageProps {
   params: Promise<{
@@ -13,6 +14,7 @@ interface ProjectDetailsPageProps {
 
 export default function ProjectDetailsPage({ params }: ProjectDetailsPageProps) {
   const router = useRouter();
+  const { showSuccess, showError } = useToast();
   const [project, setProject] = useState<Project | null>(null);
   const [feedbackCount, setFeedbackCount] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -56,9 +58,11 @@ export default function ProjectDetailsPage({ params }: ProjectDetailsPageProps) 
       const embedScript = generateEmbedScript(project.projectKey);
       await navigator.clipboard.writeText(embedScript);
       setCopied(true);
+      showSuccess('Embed code copied to clipboard!');
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
       console.error('Failed to copy:', err);
+      showError('Failed to copy embed code');
     }
   };
 
@@ -77,9 +81,13 @@ export default function ProjectDetailsPage({ params }: ProjectDetailsPageProps) 
         const updatedProject = await response.json();
         setProject(updatedProject);
         setIsEditing(false);
+        showSuccess('Project updated successfully!');
+      } else {
+        showError('Failed to update project');
       }
     } catch (error) {
       console.error('Failed to update project:', error);
+      showError('An error occurred while updating');
     } finally {
       setSaving(false);
     }
@@ -101,10 +109,15 @@ export default function ProjectDetailsPage({ params }: ProjectDetailsPageProps) 
       });
 
       if (response.ok) {
+        showSuccess('Project deleted successfully');
         router.push('/dashboard');
+      } else {
+        showError('Failed to delete project');
+        setDeleting(false);
       }
     } catch (error) {
       console.error('Failed to delete project:', error);
+      showError('An error occurred while deleting');
       setDeleting(false);
     }
   };
