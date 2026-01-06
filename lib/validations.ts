@@ -13,9 +13,7 @@ export type CreateProjectFormData = z.infer<typeof createProjectSchema>;
 
 // Feedback validation schema
 export const createFeedbackSchema = z.object({
-  type: z.enum(['bug', 'feature', 'other'], {
-    required_error: 'Please select a feedback type',
-  }),
+  type: z.enum(['bug', 'feature', 'other']),
   message: z.string()
     .min(1, 'Message is required')
     .min(10, 'Message must be at least 10 characters')

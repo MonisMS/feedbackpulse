@@ -42,7 +42,7 @@ export default function CreateProjectForm({ onClose, onSuccess }: CreateProjectF
         setApiError(errorMsg);
         showError(errorMsg);
       }
-    } catch (err) {
+    } catch {
       const errorMsg = 'An error occurred. Please try again.';
       setApiError(errorMsg);
       showError(errorMsg);

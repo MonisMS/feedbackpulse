@@ -43,7 +43,7 @@ export default function LabelManager({ feedbackId, onLabelAdded, onCancel }: Lab
         setApiError(errorMsg);
         showError(errorMsg);
       }
-    } catch (err) {
+    } catch {
       const errorMsg = 'An error occurred';
       setApiError(errorMsg);
       showError(errorMsg);

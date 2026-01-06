@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import type { FeedbackWithLabels, FeedbackType } from '@/types/feedback';
 import FeedbackItem from '@/components/feedback/feedback-item';
@@ -22,24 +22,7 @@ export default function FeedbackPage({ params }: FeedbackPageProps) {
   const [activeFilter, setActiveFilter] = useState<FeedbackType>('all');
   const [currentPage, setCurrentPage] = useState(1);
 
-  useEffect(() => {
-    params.then(p => {
-      setProjectId(p.id);
-      fetchFeedback(p.id);
-    });
-  }, [params]);
-
-  useEffect(() => {
-    // Apply filter
-    if (activeFilter === 'all') {
-      setFilteredFeedback(feedback);
-    } else {
-      setFilteredFeedback(feedback.filter(f => f.type === activeFilter));
-    }
-    setCurrentPage(1); // Reset to first page when filter changes
-  }, [activeFilter, feedback]);
-
-  const fetchFeedback = async (id: string) => {
+  const fetchFeedback = useCallback(async (id: string) => {
     try {
       setLoading(true);
       const response = await fetch(`/api/projects/${id}/feedback`);
@@ -54,7 +37,24 @@ export default function FeedbackPage({ params }: FeedbackPageProps) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [router]);
+
+  useEffect(() => {
+    params.then(p => {
+      setProjectId(p.id);
+      fetchFeedback(p.id);
+    });
+  }, [params, fetchFeedback]);
+
+  useEffect(() => {
+    // Apply filter
+    if (activeFilter === 'all') {
+      setFilteredFeedback(feedback);
+    } else {
+      setFilteredFeedback(feedback.filter(f => f.type === activeFilter));
+    }
+    setCurrentPage(1); // Reset to first page when filter changes
+  }, [activeFilter, feedback]);
 
   const handleLabelAdded = () => {
     fetchFeedback(projectId);

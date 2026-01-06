@@ -118,7 +118,7 @@ export const authOptions: NextAuthOptions = {
           if (!existingAccount) {
             await db.insert(account).values({
               userId: userId,
-              type: signInAccount.type,
+              type: signInAccount.type as "email" | "oauth" | "oidc" | "webauthn",
               provider: signInAccount.provider,
               providerAccountId: signInAccount.providerAccountId,
               refresh_token: signInAccount.refresh_token,
@@ -138,7 +138,7 @@ export const authOptions: NextAuthOptions = {
       return true;
     },
 
-    async jwt({ token, user: jwtUser, account: jwtAccount }) {
+    async jwt({ token, user: jwtUser }) {
       if (jwtUser) {
         token.id = jwtUser.id;
         token.email = jwtUser.email;

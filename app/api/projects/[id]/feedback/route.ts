@@ -62,17 +62,10 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       .orderBy(desc(feedback.createdAt));
 
     // Fetch labels for all feedback items
-    const feedbackIds = feedbackData.map(f => f.id);
-    const labelsData = feedbackIds.length > 0
-      ? await db
-          .select()
-          .from(feedbackLabel)
-          .where(eq(feedbackLabel.feedbackId, feedbackIds[0]))
-          .orderBy(feedbackLabel.createdAt)
-      : [];
-
+    
     // Group labels by feedbackId
-    const labelsByFeedback: Record<number, typeof labelsData> = {};
+    type LabelType = typeof feedbackLabel.$inferSelect;
+    const labelsByFeedback: Record<number, LabelType[]> = {};
     
     // Fetch labels for each feedback separately (simple approach)
     for (const fb of feedbackData) {

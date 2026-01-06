@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import type { Project } from '@/types/project';
 import { generateEmbedScript } from '@/lib/project-utils';
@@ -25,14 +25,7 @@ export default function ProjectDetailsPage({ params }: ProjectDetailsPageProps) 
   const [deleting, setDeleting] = useState(false);
   const [projectId, setProjectId] = useState<string>('');
 
-  useEffect(() => {
-    params.then(p => {
-      setProjectId(p.id);
-      fetchProjectDetails(p.id);
-    });
-  }, [params]);
-
-  const fetchProjectDetails = async (id: string) => {
+  const fetchProjectDetails = useCallback(async (id: string) => {
     try {
       setLoading(true);
       const response = await fetch(`/api/projects/${id}`);
@@ -50,7 +43,14 @@ export default function ProjectDetailsPage({ params }: ProjectDetailsPageProps) 
     } finally {
       setLoading(false);
     }
-  };
+  }, [router]);
+
+  useEffect(() => {
+    params.then(p => {
+      setProjectId(p.id);
+      fetchProjectDetails(p.id);
+    });
+  }, [params, fetchProjectDetails]);
 
   const handleCopyEmbed = async () => {
     if (!project) return;
