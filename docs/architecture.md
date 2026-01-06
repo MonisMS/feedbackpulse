@@ -280,3 +280,23 @@ NEXT_PUBLIC_APP_URL=            # Public-facing URL for widget
 - ✅ Form validation
 - ✅ Code organization
 - ✅ Reusable components
+
+---
+
+## Example Production Widget Embed
+
+```html
+<script>
+  (function() {
+    var script = document.createElement('script');
+    script.src = 'https://feedbackpulse-sepia.vercel.app/api/widget';
+    script.dataset.projectKey = 'YOUR_PROJECT_KEY';
+    script.dataset.apiUrl = 'https://feedbackpulse-sepia.vercel.app';
+    document.head.appendChild(script);
+  })();
+</script>
+```
+
+Replace `YOUR_PROJECT_KEY` with your actual project key from the dashboard. Use this snippet on any production or demo site to enable the FeedbackPulse widget.
+
+---

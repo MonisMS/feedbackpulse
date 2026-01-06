@@ -93,7 +93,7 @@ yarn dev
 
 5. **Open your browser**
 
-Navigate to [http://localhost:3000](http://localhost:3000)
+Navigate to `https://feedbackpulse-sepia.vercel.app` for production or `http://localhost:3000` for local development
 
 ## Project Structure
 

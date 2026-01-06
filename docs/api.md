@@ -411,7 +411,7 @@ curl -X POST http://localhost:3000/api/auth/register \
 
 **2. Create Project**
 ```bash
-curl -X POST http://localhost:3000/api/projects \
+curl -X POST https://feedbackpulse-sepia.vercel.app/api/projects \
   -H "Content-Type: application/json" \
   -H "Cookie: next-auth.session-token=..." \
   -d '{"name":"My Website"}'
@@ -419,7 +419,7 @@ curl -X POST http://localhost:3000/api/projects \
 
 **3. Submit Feedback (from widget)**
 ```bash
-curl -X POST http://localhost:3000/api/feedback \
+curl -X POST https://feedbackpulse-sepia.vercel.app/api/feedback \
   -H "Content-Type: application/json" \
   -d '{
     "projectKey":"K7MP9XL2",
@@ -432,13 +432,13 @@ curl -X POST http://localhost:3000/api/feedback \
 
 **4. Get Feedback**
 ```bash
-curl http://localhost:3000/api/projects/1/feedback \
+curl https://feedbackpulse-sepia.vercel.app/api/projects/1/feedback \
   -H "Cookie: next-auth.session-token=..."
 ```
 
 **5. Add Label**
 ```bash
-curl -X POST http://localhost:3000/api/feedback/1/labels \
+curl -X POST https://feedbackpulse-sepia.vercel.app/api/feedback/1/labels \
   -H "Content-Type: application/json" \
   -H "Cookie: next-auth.session-token=..." \
   -d '{"label":"urgent"}'

@@ -22,7 +22,7 @@ export function generateProjectKey(): string {
  * Generates the embed script snippet for a project
  * This script will be copied by users and pasted into their website
  */
-export function generateEmbedScript(projectKey: string, baseUrl: string = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'): string {
+export function generateEmbedScript(projectKey: string, baseUrl: string = process.env.NEXT_PUBLIC_APP_URL || 'https://feedbackpulse-sepia.vercel.app'): string {
   return `<script>
   (function() {
     var script = document.createElement('script');
