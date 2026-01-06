@@ -2,7 +2,7 @@
 
 ## Base URL
 - Development: `http://localhost:3000`
-- Production: `https://your-domain.com`
+- Production: `https://feedbackpulse-sepia.vercel.app`
 
 ## Authentication
 
@@ -41,6 +41,8 @@ Register a new user account.
 
 ### POST `/api/auth/signin`
 Sign in with credentials (handled by NextAuth).
+
+**Note:** The actual sign-in page is at `/signin` (not `/api/auth/signin`). NextAuth handles the API internally.
 
 ---
 
@@ -399,9 +401,12 @@ Access-Control-Allow-Headers: Content-Type
 
 **1. Register & Login**
 ```bash
+# Register a new user
 curl -X POST http://localhost:3000/api/auth/register \
   -H "Content-Type: application/json" \
   -d '{"email":"test@example.com","password":"SecurePass123","name":"Test User"}'
+
+# Then sign in via the web interface at /signin
 ```
 
 **2. Create Project**

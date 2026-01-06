@@ -69,22 +69,28 @@ FeedbackPulse is a SaaS application that allows website owners to collect and ma
 ```
 feedbackpulse/
 ├── app/                          # Next.js App Router
+│   ├── (auth)/                   # Route group (not in URL)
+│   │   ├── signin/               # /signin page
+│   │   └── signup/               # /signup page
 │   ├── api/                      # API routes
 │   │   ├── auth/                 # Authentication endpoints
 │   │   ├── projects/             # Project CRUD
 │   │   ├── feedback/             # Feedback & labels
 │   │   └── widget/               # Widget serving
-│   ├── auth/                     # Auth pages (signin/signup)
 │   ├── dashboard/                # Protected dashboard
 │   │   └── projects/[id]/        # Project details & feedback
 │   ├── globals.css               # Global styles
-│   └── layout.tsx                # Root layout
+│   ├── layout.tsx                # Root layout
+│   └── page.tsx                  # Home (redirects to auth)
 ├── components/                   # React components
 │   ├── feedback/                 # Feedback display components
 │   ├── project/                  # Project components
 │   └── providers/                # Context providers
 ├── db/                          # Database
 │   └── schema.ts                # Drizzle schema
+├── docs/                        # Documentation
+│   ├── architecture.md          # System architecture
+│   └── api.md                   # API documentation
 ├── lib/                         # Utilities
 │   ├── auth.ts                  # NextAuth config
 │   ├── db.ts                    # Database connection

@@ -126,7 +126,7 @@ feedbackpulse/
 
 ### 1. Create an Account
 
-Visit `/auth/signup` and create an account using:
+Visit `/signup` and create an account using:
 - Email and password
 - Google OAuth
 - GitHub OAuth
@@ -155,9 +155,9 @@ Add the generated script to any HTML page:
   <script>
     (function() {
       var script = document.createElement('script');
-      script.src = 'http://localhost:3000/api/widget';
+      script.src = 'https://feedbackpulse-sepia.vercel.app/api/widget';
       script.dataset.projectKey = 'YOUR_PROJECT_KEY';
-      script.dataset.apiUrl = 'http://localhost:3000';
+      script.dataset.apiUrl = 'https://feedbackpulse-sepia.vercel.app';
       document.head.appendChild(script);
     })();
   </script>
@@ -177,9 +177,9 @@ Add the generated script to any HTML page:
 ### Testing the Complete Flow
 
 1. **Register & Login**
-   - Visit `/auth/signup`
+   - Visit `/signup`
    - Create an account
-   - Sign in at `/auth/signin`
+   - Sign in at `/signin`
 
 2. **Create a Project**
    - Click "Create New Project" on dashboard
